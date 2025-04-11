@@ -35,7 +35,7 @@ Resources:
       AvailabilityZone: !Select [0, !GetAZs ""]
       Tags:
         - Key: Name
-          Value: AzmiPublicSubnet1
+          Value: AzmiPrivateSubnet1
 
   AzmiPublicSubnet2:
     Type: AWS::EC2::Subnet
@@ -45,7 +45,7 @@ Resources:
       AvailabilityZone: !Select [1, !GetAZs ""]
       Tags:
         - Key: Name
-          Value: AzmiPublicSubnet2
+          Value: AzmiPrivateSubnet2
 
   AzmiInternetGateway:
     Type: AWS::EC2::InternetGateway
