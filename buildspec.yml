@@ -1,20 +1,26 @@
 version: 0.2
+
 phases:
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
-      - aws ecr get-login-password --region ca-central-1 | docker login --username AWS --password-stdin 241533152758.dkr.ecr.ca-central-1.amazonaws.com
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 211125401262.dkr.ecr.us-east-1.amazonaws.com
+      - REPOSITORY_URI=211125401262.dkr.ecr.us-east-1.amazonaws.com/azmi
+      - IMAGE_TAG=latest
+
   build:
     commands:
       - echo Building Docker image...
-      - docker build -t choudhary-app .
-      - docker tag choudhary-app 241533152758.dkr.ecr.ca-central-1.amazonaws.com/choudhary-app:latest
+      - docker build -t $REPOSITORY_URI:$IMAGE_TAG .
+      - docker tag $REPOSITORY_URI:$IMAGE_TAG $REPOSITORY_URI:$IMAGE_TAG
+
   post_build:
     commands:
-      - echo Pushing Docker image...
-      - docker push 241533152758.dkr.ecr.ca-central-1.amazonaws.com/choudhary-app:latest
-      - echo Writing image definitions file...
-      - printf '[{"name":"choudhary-container","imageUri":"%s"}]' 241533152758.dkr.ecr.ca-central-1.amazonaws.com/choudhary-app:latest > imagedefinitions.json
+      - echo Pushing Docker image to ECR...
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - echo Writing imagedefinitions.json...
+      - printf '[{"name":"azmi-container","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+
 artifacts:
   files:
     - imagedefinitions.json
