@@ -1,5 +1,5 @@
 # Use official Python image
-FROM python:3.9-slim
+FROM public.ecr.aws/lambda/python:3.9
 
 # Set working directory
 WORKDIR /app
